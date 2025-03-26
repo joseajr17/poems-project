@@ -23,7 +23,6 @@ public class Poem {
     @GeneratedValue
     private UUID id;
     private String title;
-    private String text;
     private String author;
     private Date date;
 }
