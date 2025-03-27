@@ -21,6 +21,4 @@ public class StanzaController {
         Stanza stanzas = stanzaService.addStanzaToEvent(poemId, data);
         return ResponseEntity.ok(stanzas);
     }
-
-
 }
