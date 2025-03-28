@@ -68,4 +68,9 @@ public class PoemService {
                         poem.getDate()))
                 .stream().toList();
     }
+
+    public void deletePoem(UUID poemId) {
+        this.poemRepository.delete(this.poemRepository.findById(poemId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found")));
+    }
 }
