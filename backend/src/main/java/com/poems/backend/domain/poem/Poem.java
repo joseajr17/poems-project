@@ -24,5 +24,6 @@ public class Poem {
     private UUID id;
     private String title;
     private String author;
+    private String content;
     private Date date;
 }
