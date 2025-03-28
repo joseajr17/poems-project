@@ -1,6 +1,7 @@
 package com.poems.backend.service;
 
 import com.poems.backend.domain.poem.Poem;
+import com.poems.backend.domain.poem.PoemDetailsDTO;
 import com.poems.backend.domain.poem.PoemRequestDTO;
 import com.poems.backend.domain.poem.PoemResponseDTO;
 import com.poems.backend.repositories.PoemRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PoemService {
@@ -37,6 +39,18 @@ public class PoemService {
         Page<Poem> poemsPage = this.poemRepository.findAll(pageable);
         return poemsPage.map(poem -> new PoemResponseDTO(poem.getId(), poem.getTitle(), poem.getAuthor(), poem.getContent(), poem.getDate()))
                 .stream().toList();
+    }
+
+    public PoemDetailsDTO getPoemDetails(UUID poemId) {
+        Poem poem = poemRepository.findById(poemId)
+                .orElseThrow(() -> new IllegalArgumentException("Poem not found"));
+
+        return new PoemDetailsDTO(
+                poem.getId(),
+                poem.getTitle(),
+                poem.getAuthor(),
+                poem.getContent(),
+                poem.getDate());
     }
 
     public List<PoemResponseDTO> getFilteredPoems(int page, int size, String title, Date startDate, Date endDate) {
