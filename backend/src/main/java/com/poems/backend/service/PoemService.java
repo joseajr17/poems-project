@@ -69,6 +69,20 @@ public class PoemService {
                 .stream().toList();
     }
 
+    public Poem updatePoem(UUID poemId, PoemRequestDTO data) {
+        Poem editedPoem = poemRepository.findById(poemId)
+                .orElseThrow(() -> new IllegalArgumentException("Poem not found"));
+
+        editedPoem.setTitle(data.title() != null ? data.title() : editedPoem.getTitle());
+        editedPoem.setAuthor(data.author() != null ? data.author() : editedPoem.getAuthor());
+        editedPoem.setContent(data.content() != null ? data.content() : editedPoem.getContent());
+        editedPoem.setDate(data.date() != null ? new Date(data.date()) : editedPoem.getDate());
+
+        poemRepository.save(editedPoem);
+
+        return editedPoem;
+    }
+
     public void deletePoem(UUID poemId) {
         this.poemRepository.delete(this.poemRepository.findById(poemId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found")));
