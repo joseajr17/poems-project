@@ -1,6 +1,7 @@
 package com.poems.backend.controller;
 
 import com.poems.backend.domain.poem.Poem;
+import com.poems.backend.domain.poem.PoemDetailsDTO;
 import com.poems.backend.domain.poem.PoemRequestDTO;
 import com.poems.backend.domain.poem.PoemResponseDTO;
 import com.poems.backend.service.PoemService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/poem")
@@ -33,7 +35,12 @@ public class PoemController {
         return ResponseEntity.ok(allPoems);
     }
 
+    @GetMapping("/{poemId}")
+    public ResponseEntity<PoemDetailsDTO> getPoemDetails(@PathVariable UUID poemId) {
+        PoemDetailsDTO poemDetails = poemService.getPoemDetails(poemId);
 
+        return ResponseEntity.ok(poemDetails);
+    }
 
     @GetMapping("/filter")
     public ResponseEntity<List<PoemResponseDTO>> getFilteredPoems(@RequestParam(defaultValue = "0") int page,
