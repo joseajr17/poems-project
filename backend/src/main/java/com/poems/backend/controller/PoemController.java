@@ -33,6 +33,8 @@ public class PoemController {
         return ResponseEntity.ok(allPoems);
     }
 
+
+
     @GetMapping("/filter")
     public ResponseEntity<List<PoemResponseDTO>> getFilteredPoems(@RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "10") int size,
@@ -42,5 +44,7 @@ public class PoemController {
         List<PoemResponseDTO> poems = poemService.getFilteredPoems(page, size, title, startDate, endDate);
         return ResponseEntity.ok(poems);
     }
+
+
 
 }

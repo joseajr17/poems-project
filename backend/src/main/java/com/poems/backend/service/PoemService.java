@@ -24,6 +24,7 @@ public class PoemService {
 
         newPoem.setTitle(data.title());
         newPoem.setAuthor(data.author());
+        newPoem.setContent(data.content());
         newPoem.setDate(new Date(data.date()));
 
         poemRepository.save(newPoem);
@@ -34,7 +35,7 @@ public class PoemService {
     public List<PoemResponseDTO> getPoems(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Poem> poemsPage = this.poemRepository.findAll(pageable);
-        return poemsPage.map(poem -> new PoemResponseDTO(poem.getId(), poem.getTitle(), poem.getAuthor(), poem.getDate()))
+        return poemsPage.map(poem -> new PoemResponseDTO(poem.getId(), poem.getTitle(), poem.getAuthor(), poem.getContent(), poem.getDate()))
                 .stream().toList();
     }
 
@@ -49,6 +50,7 @@ public class PoemService {
                         poem.getId(),
                         poem.getTitle(),
                         poem.getAuthor(),
+                        poem.getContent(),
                         poem.getDate()))
                 .stream().toList();
     }

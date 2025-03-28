@@ -1,0 +1,1 @@
+ALTER TABLE poem ADD COLUMN content TEXT NOT NULL;
