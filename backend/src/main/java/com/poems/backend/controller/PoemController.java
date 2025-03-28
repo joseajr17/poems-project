@@ -52,6 +52,12 @@ public class PoemController {
         return ResponseEntity.ok(poems);
     }
 
+    @PutMapping("/{poemId}")
+    public ResponseEntity<Poem> updatePoem(@PathVariable UUID poemId, @RequestBody PoemRequestDTO body) {
+        Poem poemUpdated = poemService.updatePoem(poemId, body);
+        return ResponseEntity.ok(poemUpdated);
+    }
+
     @DeleteMapping("/{poemId}")
     public ResponseEntity<Void> deletePoem(@PathVariable UUID poemId) {
         poemService.deletePoem(poemId);
