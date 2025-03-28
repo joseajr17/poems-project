@@ -36,8 +36,5 @@ public class PoemService {
         Page<Poem> poemsPage = this.poemRepository.findAll(pageable);
         return poemsPage.map(poem -> new PoemResponseDTO(poem.getId(), poem.getTitle(), poem.getAuthor(), poem.getDate()))
                 .stream().toList();
-
-
-
     }
 }
