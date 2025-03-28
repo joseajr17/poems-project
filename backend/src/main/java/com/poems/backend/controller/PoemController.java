@@ -52,6 +52,12 @@ public class PoemController {
         return ResponseEntity.ok(poems);
     }
 
+    @DeleteMapping("/{poemId}")
+    public ResponseEntity<Void> deletePoem(@PathVariable UUID poemId) {
+        poemService.deletePoem(poemId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 }
