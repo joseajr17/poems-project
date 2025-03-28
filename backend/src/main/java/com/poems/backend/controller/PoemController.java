@@ -32,4 +32,15 @@ public class PoemController {
         List<PoemResponseDTO> allPoems = this.poemService.getPoems(page, size);
         return ResponseEntity.ok(allPoems);
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<PoemResponseDTO>> getFilteredPoems(@RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size,
+                                                                  @RequestParam(required = false) String title,
+                                                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+                                                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
+        List<PoemResponseDTO> poems = poemService.getFilteredPoems(page, size, title, startDate, endDate);
+        return ResponseEntity.ok(poems);
+    }
+
 }
