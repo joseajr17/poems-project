@@ -37,4 +37,19 @@ public class PoemService {
         return poemsPage.map(poem -> new PoemResponseDTO(poem.getId(), poem.getTitle(), poem.getAuthor(), poem.getDate()))
                 .stream().toList();
     }
+
+    public List<PoemResponseDTO> getFilteredPoems(int page, int size, String title, Date startDate, Date endDate) {
+        title = (title != null) ? title : "";
+        startDate = (startDate != null) ? startDate : new Date(0);
+        endDate = (endDate != null) ? endDate : new Date();
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Poem> poemsPage = this.poemRepository.findFilteredPoems(title, startDate, endDate, pageable);
+        return poemsPage.map(poem -> new PoemResponseDTO(
+                        poem.getId(),
+                        poem.getTitle(),
+                        poem.getAuthor(),
+                        poem.getDate()))
+                .stream().toList();
+    }
 }
