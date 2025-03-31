@@ -10,10 +10,14 @@ import {
 
 import { api } from '../../services/api.ts';
 import { PoemData } from "../interfaces/PoemData.ts";
+import { PoemModal } from "../PoemModal/index.tsx";
 
 export function PoemList() {
 
     const [poems, setPoems] = useState<PoemData[]>([]);
+
+    const [selectedPoemId, setSelectedPoemId] = useState<string | null>(null);
+
     useEffect(() => {
         getPoems();
     }, []);
@@ -38,9 +42,18 @@ export function PoemList() {
                             <div className="flex justify-end">
                                 <button
                                     className="text-blue-500 hover:underline"
+                                    onClick={() => setSelectedPoemId(poem.id)}
                                 >
                                     Ver mais
                                 </button>
+
+                                {selectedPoemId !== null && (
+                                    <PoemModal
+                                        poemId={selectedPoemId}
+                                        isModalOpen={selectedPoemId !== null}
+                                        setIsModalOpen={() => setSelectedPoemId(null)}
+                                    />
+                                )}
                             </div>
                         </CardContent>
                         <CardFooter className="mt-auto">
