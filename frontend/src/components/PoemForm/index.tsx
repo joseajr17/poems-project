@@ -77,8 +77,8 @@ export function PoemForm({ getPoems }: PoemFormProps) {
     }
 
     return (
-        <div className="flex items-center justify-center h-screen w-full text-black ">
-            <div className="w-full max-w-2xl max-h-[600px] rounded-md shadow bg-white p-8 overflow-y-auto">
+        <section className="flex items-center justify-center h-screen w-full text-black ">
+            <div className="w-full max-w-2xl max-h-[600px] rounded-md border-gray-300 border shadow bg-white p-8 overflow-y-auto">
                 <h1 className="text-xl font-bold text-center">Cadastro de Poemas</h1>
                 <form
                     className="flex gap-6 flex-col mt-8"
@@ -89,6 +89,7 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                             <Label>Título</Label>
                             <Input
                                 type="text"
+                                placeholder="Digite o título do Poema"
                                 {...register('title')}
                             />
                             {formState.errors.title?.message && <span className="text-red-500 text-xs">{formState.errors.title?.message}</span>}
@@ -96,6 +97,7 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                         <div>
                             <Label>Conteúdo</Label>
                             <Textarea
+                                placeholder="Digite o conteúdo do Poema"
                                 {...register('content')}
                             />
                             {formState.errors.content?.message && <span className="text-red-500 text-xs">{formState.errors.content?.message}</span>}
@@ -140,7 +142,9 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                             </div>
 
                             <div>
-                                <Select value={year || ""} onValueChange={(value) => setYear(value)}>
+                                <Select
+                                    value={year || ""}
+                                    onValueChange={(value) => setYear(value)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Ano" />
                                     </SelectTrigger>
@@ -159,10 +163,10 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                     </div>
                     <Button
                         type="submit"
-                        className="mt-8"
+                        className="mt-8 bg-green-500 hover:bg-green-500/90 cursor-pointer"
                     >Salvar novo poema</Button>
                 </form>
             </div>
-        </div>
+        </section>
     )
 }
