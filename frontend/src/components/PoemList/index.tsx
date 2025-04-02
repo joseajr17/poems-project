@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Card,
     CardContent,
@@ -8,24 +8,16 @@ import {
     CardTitle,
 } from "../ui/card";
 
-import { api } from '../../services/api.ts';
-import { PoemData } from "../interfaces/PoemData.ts";
 import { PoemModal } from "../PoemModal/index.tsx";
+import { PoemData } from "../interfaces/PoemData.ts";
 
-export function PoemList() {
+type PoemListProps = {
+    poems: PoemData[];
+  };
 
-    const [poems, setPoems] = useState<PoemData[]>([]);
+export function PoemList({ poems }:  PoemListProps) {
 
     const [selectedPoemId, setSelectedPoemId] = useState<string | null>(null);
-
-    useEffect(() => {
-        getPoems();
-    }, []);
-
-    async function getPoems() {
-        const poemsAPI = await api.get('/api/poem');
-        setPoems(poemsAPI.data);
-    }
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-center items-center m-2 p-2 border w-3/4">
