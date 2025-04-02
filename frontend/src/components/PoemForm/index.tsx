@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { generateDays, generateMonths, generateYears } from "./dateUtils";
 import { formSchema, FormData } from "../schemas/poemFormSchema";
 import { api } from '../../services/api';
+import { useState } from "react";
 
 type PoemFormProps = {
     getPoems: () => Promise<void>;
@@ -21,7 +22,7 @@ type PoemFormProps = {
 
 export function PoemForm({ getPoems }: PoemFormProps) {
 
-    const { handleSubmit, register, formState, setValue } = useForm<FormData>({
+    const { handleSubmit, register, formState, reset } = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
@@ -33,6 +34,11 @@ export function PoemForm({ getPoems }: PoemFormProps) {
             },
         },
     });
+
+    const [day, setDay] = useState<string | undefined>();
+    const [month, setMonth] = useState<string | undefined>();
+    const [year, setYear] = useState<string | undefined>();
+
 
     const days = generateDays();
     const months = generateMonths();
@@ -59,7 +65,10 @@ export function PoemForm({ getPoems }: PoemFormProps) {
         try {
             await api.post("http://localhost:8080/api/poem", payload);
             getPoems();
-
+            reset();
+            setDay(undefined);
+            setMonth(undefined);
+            setYear(undefined);
         } catch (error) {
             console.error("Erro na requisição:", error);
         }
@@ -99,7 +108,7 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                         <div className="grid grid-cols-3 gap-4 items-end pt-0">
 
                             <div>
-                                <Select onValueChange={(value) => setValue('poemDate.day', value)}>
+                                <Select value={day || ""} onValueChange={(value) => setDay(value)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Dia" />
                                     </SelectTrigger>
@@ -115,7 +124,7 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                             </div>
 
                             <div>
-                                <Select onValueChange={(value) => setValue('poemDate.month', value)}>
+                                <Select value={month || ""} onValueChange={(value) => setMonth(value)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Mês" />
                                     </SelectTrigger>
@@ -131,7 +140,7 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                             </div>
 
                             <div>
-                                <Select onValueChange={(value) => setValue('poemDate.year', value)}>
+                                <Select value={year || ""} onValueChange={(value) => setYear(value)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Ano" />
                                     </SelectTrigger>
