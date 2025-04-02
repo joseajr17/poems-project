@@ -22,7 +22,7 @@ export function Home() {
     }, []);
 
     return (
-        <div className=" flex items-center justify-center flex-col min-h-screen min-w-screen">
+        <div className=" flex items-center justify-center flex-col">
             <PoemForm getPoems={getPoems} />
             <PoemList poems={poems} />
         </div>
