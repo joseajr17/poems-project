@@ -15,7 +15,11 @@ import { generateDays, generateMonths, generateYears } from "./dateUtils";
 import { formSchema, FormData } from "../schemas/poemFormSchema";
 import { api } from '../../services/api';
 
-export function PoemForm() {
+type PoemFormProps = {
+    getPoems: () => Promise<void>;
+};
+
+export function PoemForm({ getPoems }: PoemFormProps) {
 
     const { handleSubmit, register, formState, setValue } = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -54,6 +58,7 @@ export function PoemForm() {
 
         try {
             await api.post("http://localhost:8080/api/poem", payload);
+            getPoems();
 
         } catch (error) {
             console.error("Erro na requisição:", error);
