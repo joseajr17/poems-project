@@ -10,62 +10,56 @@ import {
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
-import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
-
-
-const formSchema = z.object({
-    title: z.string().min(1, {
-        message: "O título não pode ser vazio.",
-    }),
-    content: z.string().min(1, {
-        message: "O conteúdo não pode ser vazio.",
-    }),
-    poemDate: z.object({
-        day: z.string().optional(),
-        month: z.string().optional(),
-        year: z.string().optional(),
-    })
-})
-
-type FormData = z.infer<typeof formSchema>;
-
-const generateDays = () => Array.from({ length: 31 }, (_, i) => (i + 1).toString());
-
-const generateMonths = () => [
-    { name: "Janeiro", value: "01" },
-    { name: "Fevereiro", value: "02" },
-    { name: "Março", value: "03" },
-    { name: "Abril", value: "04" },
-    { name: "Maio", value: "05" },
-    { name: "Junho", value: "06" },
-    { name: "Julho", value: "07" },
-    { name: "Agosto", value: "08" },
-    { name: "Setembro", value: "09" },
-    { name: "Outubro", value: "10" },
-    { name: "Novembro", value: "11" },
-    { name: "Dezembro", value: "12" },
-];
-
-const generateYears = (numYears: number) => {
-    const anoAtual = new Date().getFullYear();
-    return Array.from({ length: numYears }, (_, i) => (anoAtual - i).toString());
-};
+import { generateDays, generateMonths, generateYears } from "./dateUtils";
+import { formSchema, FormData } from "../schemas/poemFormSchema";
+import { api } from '../../services/api';
 
 export function PoemForm() {
 
-    const { handleSubmit, register, formState, setValue } = useForm<FormData>({ resolver: zodResolver(formSchema) });
+    const { handleSubmit, register, formState, setValue } = useForm<FormData>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            title: "",
+            content: "",
+            poemDate: {
+                day: "",
+                month: "",
+                year: "",
+            },
+        },
+    });
 
     const days = generateDays();
     const months = generateMonths();
     const years = generateYears(100);
 
+    async function onSubmitPoem(data: FormData) {
+        const { day, month, year } = data.poemDate;
 
+        let timestamp: number;
+        if (year && month && day) {
+            const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+            timestamp = date.getTime();
+        } else {
+            timestamp = new Date().getTime();
+        }
 
-    function onSubmit(data: FormData) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(data)
+        const payload = {
+            title: data.title,
+            author: "Severino Cavalcanti de Albuquerque",
+            content: data.content,
+            date: timestamp,
+        };
+
+        try {
+            await api.post("http://localhost:8080/api/poem", payload);
+
+        } catch (error) {
+            console.error("Erro na requisição:", error);
+        }
+
+        console.log(payload);
     }
 
     return (
@@ -74,7 +68,7 @@ export function PoemForm() {
                 <h1 className="text-xl font-bold text-center">Cadastro de Poemas</h1>
                 <form
                     className="flex gap-6 flex-col mt-8"
-                    onSubmit={handleSubmit(onSubmit)} noValidate>
+                    onSubmit={handleSubmit(onSubmitPoem)} noValidate >
                     <div className="flex flex-col gap-4">
 
                         <div>
