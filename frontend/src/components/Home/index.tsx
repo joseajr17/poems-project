@@ -3,6 +3,7 @@ import { PoemList } from "../PoemList";
 import { api } from '../../services/api.ts';
 import { useEffect, useState } from "react";
 import { PoemData } from "../interfaces/PoemData.ts";
+import { About } from "../About/index.tsx";
 
 export function Home() {
 
@@ -22,9 +23,11 @@ export function Home() {
     }, []);
 
     return (
-        <div className=" flex items-center justify-center flex-col">
-            <PoemForm getPoems={getPoems} />
+        <div className=" flex items-center justify-center flex-col gap-5 mt-10 ">
+            <About />
+            {/* <PoemForm getPoems={getPoems} /> */}
             <PoemList poems={poems} />
         </div>
     )
+
 }
