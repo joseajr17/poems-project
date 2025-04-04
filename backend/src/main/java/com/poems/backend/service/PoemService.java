@@ -27,8 +27,11 @@ public class PoemService {
         newPoem.setTitle(data.title());
         newPoem.setAuthor(data.author());
         newPoem.setContent(data.content());
-        newPoem.setDate(new Date(data.date()));
-
+        if(data.date() == null){
+            newPoem.setDate(new Date(0));
+        } else {
+            newPoem.setDate(new Date(data.date()));
+        }
         poemRepository.save(newPoem);
 
         return newPoem;

@@ -54,7 +54,7 @@ export function PoemModal({ poemId, isModalOpen, setIsModalOpen }: PoemModalProp
                         </CardContent>
                         <CardFooter className="mt-auto flex flex-col">
                             Poema escrito em: {new Date(poemDetails.date).toLocaleDateString()}
-                            <button onClick={() => setIsModalOpen(false)} className="mt-4 bg-red-500 text-white px-4 py-2 rounded">
+                            <button onClick={() => setIsModalOpen(false)} className="mt-4 bg-red-500 text-white px-4 py-2 rounded cursor-pointer">
                                 Fechar
                             </button>
                         </CardFooter>

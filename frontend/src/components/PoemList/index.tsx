@@ -24,10 +24,10 @@ export function PoemList({ poems }: PoemListProps) {
             <div className="flex flex-col items-center gap-2">
                 <h1 className='text-xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100'>Galeria de Poemas</h1>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center items-start ">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center items-start">
                 {poems.map(poem => (
-                    <Card key={poem.id} className="flex flex-col min-w-full transition-transform transform hover:scale-101 hover:shadow-lg border-gray-300 w-full h-[450px]">
-                        <CardHeader>
+                    <Card key={poem.id} className="flex flex-col min-w-full transition-transform transform hover:scale-101 hover:shadow-lg border-gray-300 w-full h-[500px]">
+                        <CardHeader className="gap-5">
                             <CardTitle >{poem.title}</CardTitle>
                             <CardDescription>Poema escrito por: {poem.author}</CardDescription>
                         </CardHeader>
@@ -48,15 +48,15 @@ export function PoemList({ poems }: PoemListProps) {
                                     setIsModalOpen={() => setSelectedPoemId(null)}
                                 />
                             )}
-
                         </CardContent>
                         <CardFooter className="mt-auto">
-                            Poema escrito em: {new Date(poem.date).toLocaleDateString()}
+                            {new Date(poem.date).toLocaleDateString() != "31/12/1969" ? `Poema escrito em: ${new Date(poem.date).toLocaleDateString()}` : "Poema sem data"}
                         </CardFooter>
                     </Card>
-
                 ))}
             </div>
         </section>
     );
 }
+
+// 
