@@ -41,12 +41,11 @@ export function About() {
                             rel="noopener noreferrer"
                             className="text-sky-600 font-semibold hover:text-sky-800 transition-colors">
                             {" "}este link
-                        </a>, que contém o TCC de sua neta, intitulado
-                        <p className="italic"> "Remígio, memórias e estórias contadas em poesia por Severino Cavalcanti de Albuquerque"</p>.
-                    </p>
+                        </a>, que contém o TCC de sua neta, intitulado</p>
+                    <p className="text-gray-700 text-lg italic"> "Remígio, memórias e estórias contadas em poesia por Severino Cavalcanti de Albuquerque"</p>.
                 </div>
-            </div>
 
+            </div>
         </section>
     );
 }
