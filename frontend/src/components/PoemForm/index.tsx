@@ -6,9 +6,10 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generateDays, generateMonths, generateYears } from "./dateUtils";
@@ -22,7 +23,11 @@ type PoemFormProps = {
 
 export function PoemForm({ getPoems }: PoemFormProps) {
 
-    const { handleSubmit, register, formState, reset } = useForm<FormData>({
+    const [selectedDay, setSelectedDay] = useState<string>('');
+    const [selectedMonth, setSelectedMonth] = useState<string>('');
+    const [selectedYear, setSelectedYear] = useState<string>('');
+
+    const { handleSubmit, register, formState, setValue, reset } = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
@@ -35,11 +40,6 @@ export function PoemForm({ getPoems }: PoemFormProps) {
         },
     });
 
-    const [day, setDay] = useState<string | undefined>();
-    const [month, setMonth] = useState<string | undefined>();
-    const [year, setYear] = useState<string | undefined>();
-
-
     const days = generateDays();
     const months = generateMonths();
     const years = generateYears(100);
@@ -47,12 +47,11 @@ export function PoemForm({ getPoems }: PoemFormProps) {
     async function onSubmitPoem(data: FormData) {
         const { day, month, year } = data.poemDate;
 
-        let timestamp: number;
+        let timestamp: number = 0;
+
         if (year && month && day) {
             const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
             timestamp = date.getTime();
-        } else {
-            timestamp = new Date().getTime();
         }
 
         const payload = {
@@ -66,23 +65,25 @@ export function PoemForm({ getPoems }: PoemFormProps) {
             await api.post("http://localhost:8080/api/poem", payload);
             getPoems();
             reset();
-            setDay(undefined);
-            setMonth(undefined);
-            setYear(undefined);
+            setSelectedDay('');
+            setSelectedMonth('');
+            setSelectedYear('');
         } catch (error) {
             console.error("Erro na requisição:", error);
         }
 
-        console.log(payload);
+        console.log(`Poema escrito em: ${new Date(payload.date).toLocaleDateString()}`);
+
     }
 
     return (
-        <section className="flex items-center justify-center h-screen w-full text-black ">
+        <section className="flex items-center justify-center h-screen w-full text-black">
             <div className="w-full max-w-2xl max-h-[600px] rounded-md border-gray-300 border shadow bg-white p-8 overflow-y-auto">
                 <h1 className="text-xl font-bold text-center">Cadastro de Poemas</h1>
                 <form
                     className="flex gap-6 flex-col mt-8"
                     onSubmit={handleSubmit(onSubmitPoem)} noValidate >
+
                     <div className="flex flex-col gap-4">
 
                         <div>
@@ -92,25 +93,36 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                                 placeholder="Digite o título do Poema"
                                 {...register('title')}
                             />
-                            {formState.errors.title?.message && <span className="text-red-500 text-xs">{formState.errors.title?.message}</span>}
+                            {formState.errors.title?.message && (
+                                <span className="text-red-500 text-xs">{formState.errors.title.message}</span>
+                            )}
                         </div>
+
                         <div>
                             <Label>Conteúdo</Label>
                             <Textarea
                                 placeholder="Digite o conteúdo do Poema"
                                 {...register('content')}
                             />
-                            {formState.errors.content?.message && <span className="text-red-500 text-xs">{formState.errors.content?.message}</span>}
+                            {formState.errors.content?.message && (
+                                <span className="text-red-500 text-xs">{formState.errors.content.message}</span>
+                            )}
                         </div>
 
                     </div>
 
                     <div>
-                        <Label className="">Data em que o poema foi escrito</Label>
+                        <Label>Data em que o poema foi escrito</Label>
                         <div className="grid grid-cols-3 gap-4 items-end pt-0">
 
                             <div>
-                                <Select value={day || ""} onValueChange={(value) => setDay(value)}>
+                                <Select
+                                    value={selectedDay}
+                                    onValueChange={(value) => {
+                                        setSelectedDay(value);
+                                        setValue('poemDate.day', value);
+                                    }}
+                                >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Dia" />
                                     </SelectTrigger>
@@ -126,7 +138,13 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                             </div>
 
                             <div>
-                                <Select value={month || ""} onValueChange={(value) => setMonth(value)}>
+                                <Select
+                                    value={selectedMonth}
+                                    onValueChange={(value) => {
+                                        setSelectedMonth(value);
+                                        setValue('poemDate.month', value);
+                                    }}
+                                >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Mês" />
                                     </SelectTrigger>
@@ -143,8 +161,12 @@ export function PoemForm({ getPoems }: PoemFormProps) {
 
                             <div>
                                 <Select
-                                    value={year || ""}
-                                    onValueChange={(value) => setYear(value)}>
+                                    value={selectedYear}
+                                    onValueChange={(value) => {
+                                        setSelectedYear(value);
+                                        setValue('poemDate.year', value);
+                                    }}
+                                >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Ano" />
                                     </SelectTrigger>
@@ -160,13 +182,20 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                             </div>
 
                         </div>
+                        {formState.errors.poemDate?.message && (
+                            <span className="text-red-500 text-xs">{formState.errors.poemDate.message}</span>
+                        )}
                     </div>
+
                     <Button
                         type="submit"
                         className="mt-8 bg-green-500 hover:bg-green-500/90 cursor-pointer"
-                    >Salvar novo poema</Button>
+                    >
+                        Salvar novo poema
+                    </Button>
+
                 </form>
             </div>
         </section>
-    )
+    );
 }

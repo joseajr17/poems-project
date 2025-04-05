@@ -50,7 +50,8 @@ export function PoemList({ poems }: PoemListProps) {
                             )}
                         </CardContent>
                         <CardFooter className="mt-auto">
-                            {new Date(poem.date).toLocaleDateString() != "31/12/1969" ? `Poema escrito em: ${new Date(poem.date).toLocaleDateString()}` : "Poema sem data"}
+                            {/* {new Date(poem.date).toLocaleDateString() != "31/12/1969" ? `Poema escrito em: ${new Date(poem.date).toLocaleDateString()}` : "Poema sem data"} */}
+                            {`Poema escrito em: ${new Date(poem.date).toLocaleDateString()}`}
                         </CardFooter>
                     </Card>
                 ))}
