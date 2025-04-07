@@ -1,8 +1,10 @@
 package com.poems.backend.controller;
 
 import com.poems.backend.domain.user.AuthDTO;
+import com.poems.backend.domain.user.LoginResponseDTO;
 import com.poems.backend.domain.user.RegisterDTO;
 import com.poems.backend.domain.user.User;
+import com.poems.backend.infra.security.TokenService;
 import com.poems.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +22,19 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("register")
