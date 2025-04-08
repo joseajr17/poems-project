@@ -1,27 +1,14 @@
 // import { PoemForm } from "../../components/PoemForm";
 import { PoemList } from "../../components/PoemList";
-import { api } from '../../services/api.ts';
-import { useEffect, useState } from "react";
-import { PoemData } from "../../components/interfaces/PoemData.ts";
 import { About } from "../../components/About";
 import { Header } from "@/components/Header/index.tsx";
+import { usePoems } from "@/hooks/usePoems";
 
 export function Home() {
+    const { poems, loading, error } = usePoems();
 
-    const [poems, setPoems] = useState<PoemData[]>([]);
-
-    async function getPoems() {
-        try {
-            const poemsAPI = await api.get('/api/poem');
-            setPoems(poemsAPI.data);
-        } catch (error) {
-            console.error("Erro ao buscar poemas:", error);
-        }
-    }
-
-    useEffect(() => {
-        getPoems();
-    }, []);
+    if (loading) return <p>Carregando poemas...</p>;
+    if (error) return <p>{error}</p>;
 
     return (
         <>
