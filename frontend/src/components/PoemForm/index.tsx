@@ -71,9 +71,6 @@ export function PoemForm({ getPoems }: PoemFormProps) {
         } catch (error) {
             console.error("Erro na requisição:", error);
         }
-
-        console.log(`Poema escrito em: ${new Date(payload.date).toLocaleDateString()}`);
-
     }
 
     return (
