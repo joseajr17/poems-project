@@ -2,13 +2,14 @@ import { SignInProps } from "@/components/interfaces/SignInProps";
 import { UserData } from "@/components/interfaces/UserData";
 import { api } from "@/services/api";
 import { createContext, ReactNode, useEffect, useState } from "react";
+import { Navigate } from "react-router";
 
 interface AuthContextType {
 
     isAuthenticated: boolean;
     user: UserData | null;
     signIn: (data: SignInProps) => Promise<void>;
-    // logout: () => void;
+    logout: () => void;
 }
 
 interface AuthProviderProps {
@@ -38,8 +39,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
             const response = await api.post('api/auth/login', { login, password });
 
-            console.log("Dados recebidos do backend:", response.data);
-
             if (response.data.error) {
                 alert(response.data.error);
             } else {
@@ -56,8 +55,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         } catch (error) {
             console.error("Erro ao fazer login:", error);
         }
+    }
 
-
+    function logout() {
+        setUser(null);
+        localStorage.removeItem("@Auth:user");
+        localStorage.removeItem("@Auth:token");
+        delete api.defaults.headers.common["Authorization"];
+        return <Navigate to="/" />
     }
 
     return (
@@ -66,6 +71,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 user,
                 isAuthenticated: !!user,
                 signIn,
+                logout
 
 
             }}
