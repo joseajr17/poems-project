@@ -4,12 +4,18 @@ import { IoBook } from "react-icons/io5";
 import { Link } from "react-router";
 import { IoHomeOutline } from "react-icons/io5";
 import { IoLogOutOutline } from "react-icons/io5";
+import { IoIosAddCircleOutline } from "react-icons/io";
+
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
+import { PoemForm } from "@/components/PoemForm";
+import { usePoems } from "@/hooks/usePoems";
 
 interface HeaderProps {
     isAdmin?: boolean;
 }
 
 export function Header({ isAdmin = false }: HeaderProps) {
+    const { getPoems } = usePoems();
 
     const { logout } = useContext(AuthContext);
 
@@ -41,6 +47,15 @@ export function Header({ isAdmin = false }: HeaderProps) {
                         <Link to="/" className="flex items-center hover:text-sky-500  gap-1">
                             <IoHomeOutline /> Home
                         </Link>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <a className="hover:text-sky-500 cursor-pointer flex items-center gap-1"> <IoIosAddCircleOutline /> Cadastrar poema</a>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                                <DialogTitle>Cadastro de Poemas</DialogTitle>
+                                <PoemForm getPoems={getPoems} />
+                            </DialogContent>
+                        </Dialog>
                         <Link to="/logout" className="flex items-center hover:text-sky-500  gap-1" onClick={handleLogout}>
                             <IoLogOutOutline /> Sair
                         </Link>

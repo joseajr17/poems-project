@@ -62,7 +62,14 @@ export function PoemForm({ getPoems }: PoemFormProps) {
         };
 
         try {
-            await api.post("/api/poem", payload);
+            const token = localStorage.getItem("@Auth:token");
+
+            await api.post("/api/poem", payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
             getPoems();
             reset();
             setSelectedDay('');
@@ -73,10 +80,10 @@ export function PoemForm({ getPoems }: PoemFormProps) {
         }
     }
 
+
     return (
-        <section className="flex items-center justify-center h-screen w-full text-black">
-            <div className="w-full max-w-2xl max-h-[600px] rounded-md border-gray-300 border shadow bg-white p-8 overflow-y-auto">
-                <h1 className="text-xl font-bold text-center">Cadastro de Poemas</h1>
+        <div className="flex items-center justify-center w-full text-black">
+            <div className="w-full max-w-2xl max-h-[600px] rounded-md bg-white p-2 overflow-y-auto">
                 <form
                     className="flex gap-6 flex-col mt-8"
                     onSubmit={handleSubmit(onSubmitPoem)} noValidate >
@@ -182,6 +189,23 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                         {formState.errors.poemDate?.message && (
                             <span className="text-red-500 text-xs">{formState.errors.poemDate.message}</span>
                         )}
+                        <div className="flex justify-center">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className=" mt-1 text-xs"
+                                onClick={() => {
+                                    setSelectedDay('');
+                                    setSelectedMonth('');
+                                    setSelectedYear('');
+                                    setValue('poemDate.day', '');
+                                    setValue('poemDate.month', '');
+                                    setValue('poemDate.year', '');
+                                }}
+                            >
+                                Limpar data
+                            </Button>
+                        </div>
                     </div>
 
                     <Button
@@ -193,6 +217,6 @@ export function PoemForm({ getPoems }: PoemFormProps) {
 
                 </form>
             </div>
-        </section>
+        </div>
     );
 }

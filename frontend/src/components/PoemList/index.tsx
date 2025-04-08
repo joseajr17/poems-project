@@ -10,7 +10,6 @@ import {
 
 import { PoemModal } from "../PoemModal/index.tsx";
 import { PoemData } from "../interfaces/PoemData.ts";
-import { Button } from "../ui/button.tsx";
 
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
