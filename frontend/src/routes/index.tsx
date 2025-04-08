@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import { Login } from "../pages/Login";
 import { Home } from "../pages/Home";
+import { PrivateRoutes } from "./PrivateRoutes";
+import { AdminArea } from "@/pages/AdminArea";
 
 export function AppRouter() {
     return (
@@ -8,10 +10,9 @@ export function AppRouter() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
-                {/* Colocar abaixo a rota do Admin */}
-                {/* <Route path="/home" element={<PrivateRoutes />} >
-                    <Route index element={<Home />} />
-                </Route> */}
+                <Route path="/adminArea" element={<PrivateRoutes />} >
+                    <Route index element={<AdminArea />} />
+                </Route>
             </Routes>
         </Router>
     );
