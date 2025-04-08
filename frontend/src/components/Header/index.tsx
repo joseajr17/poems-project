@@ -1,4 +1,5 @@
 import { IoBook } from "react-icons/io5";
+import { Link } from "react-router";
 
 export function Header() {
     return (
@@ -11,7 +12,8 @@ export function Header() {
                 <a href="#about" className="hover:text-sky-500 hover:underline">Sobre</a>
                 <a href="#photos" className="hover:text-sky-500 hover:underline">Fotos</a>
                 <a href="#poemList" className="hover:text-sky-500 hover:underline">Poemas</a>
-                <a href="/admin" className="hover:text-sky-500 hover:underline">Admin</a>
+                <Link to="/login" className="hover:text-sky-500 hover:underline"> Admin
+                </Link>
             </nav>
         </header>
     );
