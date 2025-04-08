@@ -62,7 +62,7 @@ export function PoemForm({ getPoems }: PoemFormProps) {
         };
 
         try {
-            await api.post("http://localhost:8080/api/poem", payload);
+            await api.post("/api/poem", payload);
             getPoems();
             reset();
             setSelectedDay('');

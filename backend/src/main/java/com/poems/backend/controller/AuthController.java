@@ -1,9 +1,6 @@
 package com.poems.backend.controller;
 
-import com.poems.backend.domain.user.AuthDTO;
-import com.poems.backend.domain.user.LoginResponseDTO;
-import com.poems.backend.domain.user.RegisterDTO;
-import com.poems.backend.domain.user.User;
+import com.poems.backend.domain.user.*;
 import com.poems.backend.infra.security.TokenService;
 import com.poems.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +31,11 @@ public class AuthController {
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        var user = (User) auth.getPrincipal();
+
+        var userDTO = new UserDTO(user.getId(), user.getLogin(), user.getRole());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token, userDTO));
     }
 
     @PostMapping("register")
