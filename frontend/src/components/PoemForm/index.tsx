@@ -16,12 +16,16 @@ import { generateDays, generateMonths, generateYears } from "./dateUtils";
 import { formSchema, FormData } from "../schemas/poemFormSchema";
 import { api } from '../../services/api';
 import { useState } from "react";
+import { usePoems } from "@/hooks/usePoems";
 
 type PoemFormProps = {
-    getPoems: () => Promise<void>;
+    closeDialog: () => void;
+    getPoems?: () => Promise<void>;
 };
 
-export function PoemForm({ getPoems }: PoemFormProps) {
+export function PoemForm({ closeDialog }: PoemFormProps) {
+
+    const { getPoems } = usePoems();
 
     const [selectedDay, setSelectedDay] = useState<string>('');
     const [selectedMonth, setSelectedMonth] = useState<string>('');
@@ -69,17 +73,18 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                     Authorization: `Bearer ${token}`
                 }
             });
+            await getPoems();
 
-            getPoems();
             reset();
             setSelectedDay('');
             setSelectedMonth('');
             setSelectedYear('');
+            closeDialog();
+            
         } catch (error) {
             console.error("Erro na requisição:", error);
         }
     }
-
 
     return (
         <div className="flex items-center justify-center w-full text-black">
@@ -193,7 +198,7 @@ export function PoemForm({ getPoems }: PoemFormProps) {
                             <Button
                                 type="button"
                                 variant="outline"
-                                className=" mt-1 text-xs"
+                                className=" mt-1 text-xs cursor-pointer"
                                 onClick={() => {
                                     setSelectedDay('');
                                     setSelectedMonth('');
