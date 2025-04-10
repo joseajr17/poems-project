@@ -49,7 +49,7 @@ export function Header({ isAdmin = false, getPoems }: HeaderProps) {
                                 <DialogTrigger asChild>
                                     <a className="hover:text-sky-500 cursor-pointer flex items-center gap-1"> <IoIosAddCircleOutline /> Cadastrar poema</a>
                                 </DialogTrigger>
-                                <DialogContent className="sm:max-w-[425px]">
+                                <DialogContent className="sm:max-w-[455px]">
                                     <DialogTitle>Cadastro de Poemas</DialogTitle>
                                     <PoemForm getPoems={getPoems ?? (() => Promise.resolve())} closeDialog={() => setOpen(false)} />
                                 </DialogContent>
