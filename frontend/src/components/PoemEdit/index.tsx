@@ -1,5 +1,10 @@
+import { useEffect } from "react";
+import { PoemData } from "../interfaces/PoemData";
+import { Button } from "../ui/button";
+import { api } from "@/services/api";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import {
     Select,
     SelectContent,
@@ -7,31 +12,25 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
-
+import { generateDays, generateMonths, generateYears } from "../PoemForm/dateUtils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { generateDays, generateMonths, generateYears } from "./dateUtils";
 import { formSchema, FormData } from "../schemas/poemFormSchema";
-import { api } from '../../services/api';
-import { useState } from "react";
-import { usePoems } from "@/hooks/usePoems";
 
-type PoemFormProps = {
+
+type PoemEditProps = {
+    poem: PoemData;
     closeDialog: () => void;
     getPoems?: () => Promise<void>;
 };
 
-export function PoemForm({ closeDialog }: PoemFormProps) {
+export function PoemEdit({ poem, closeDialog, getPoems }: PoemEditProps) {
 
-    const { getPoems } = usePoems();
+    const days = generateDays();
+    const months = generateMonths();
+    const years = generateYears(100);
 
-    const [selectedDay, setSelectedDay] = useState<string>('');
-    const [selectedMonth, setSelectedMonth] = useState<string>('');
-    const [selectedYear, setSelectedYear] = useState<string>('');
-
-    const { handleSubmit, register, formState, setValue, reset } = useForm<FormData>({
+    const { handleSubmit, register, formState, setValue, watch } = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
@@ -44,9 +43,22 @@ export function PoemForm({ closeDialog }: PoemFormProps) {
         },
     });
 
-    const days = generateDays();
-    const months = generateMonths();
-    const years = generateYears(100);
+    async function getPoem() {
+        const response = await api.get(`/api/poem/${poem.id}`);
+        const poemData = response.data;
+
+        const poemDate = new Date(poemData.date);
+
+        const day = poemDate.getDate().toString().padStart(2, '0');
+        const month = (poemDate.getMonth() + 1).toString().padStart(2, '0');
+        const year = poemDate.getFullYear().toString();
+
+        setValue("title", poemData.title);
+        setValue("content", poemData.content);
+        setValue("poemDate.day", day);
+        setValue("poemDate.month", month);
+        setValue("poemDate.year", year);
+    }
 
     async function onSubmitPoem(data: FormData) {
         const { day, month, year } = data.poemDate;
@@ -60,38 +72,26 @@ export function PoemForm({ closeDialog }: PoemFormProps) {
 
         const payload = {
             title: data.title,
-            author: "Severino Cavalcanti de Albuquerque",
             content: data.content,
             date: timestamp,
         };
 
-        try {
-            const token = localStorage.getItem("@Auth:token");
-
-            await api.post("/api/poem", payload, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            await getPoems();
-
-            reset();
-            setSelectedDay('');
-            setSelectedMonth('');
-            setSelectedYear('');
-            closeDialog();
-            
-        } catch (error) {
-            console.error("Erro na requisição:", error);
-        }
+        await api.put(`/api/poem/${poem.id}`, payload);
+        getPoems?.();
+        closeDialog();
     }
+
+    useEffect(() => {
+        getPoem();
+    }, []);
 
     return (
         <div className="flex items-center justify-center w-full text-black">
             <div className="w-full max-w-2xl max-h-[600px] rounded-md bg-white p-2 overflow-y-auto">
                 <form
                     className="flex gap-6 flex-col mt-8"
-                    onSubmit={handleSubmit(onSubmitPoem)} noValidate >
+                    onSubmit={handleSubmit(onSubmitPoem)} noValidate
+                >
 
                     <div className="flex flex-col gap-4">
 
@@ -126,9 +126,8 @@ export function PoemForm({ closeDialog }: PoemFormProps) {
 
                             <div>
                                 <Select
-                                    value={selectedDay}
+                                    value={watch("poemDate.day")}
                                     onValueChange={(value) => {
-                                        setSelectedDay(value);
                                         setValue('poemDate.day', value);
                                     }}
                                 >
@@ -148,9 +147,8 @@ export function PoemForm({ closeDialog }: PoemFormProps) {
 
                             <div>
                                 <Select
-                                    value={selectedMonth}
+                                    value={watch("poemDate.month")}
                                     onValueChange={(value) => {
-                                        setSelectedMonth(value);
                                         setValue('poemDate.month', value);
                                     }}
                                 >
@@ -170,9 +168,8 @@ export function PoemForm({ closeDialog }: PoemFormProps) {
 
                             <div>
                                 <Select
-                                    value={selectedYear}
+                                    value={watch("poemDate.year")}
                                     onValueChange={(value) => {
-                                        setSelectedYear(value);
                                         setValue('poemDate.year', value);
                                     }}
                                 >
@@ -200,9 +197,6 @@ export function PoemForm({ closeDialog }: PoemFormProps) {
                                 variant="outline"
                                 className=" mt-1 text-xs cursor-pointer"
                                 onClick={() => {
-                                    setSelectedDay('');
-                                    setSelectedMonth('');
-                                    setSelectedYear('');
                                     setValue('poemDate.day', '');
                                     setValue('poemDate.month', '');
                                     setValue('poemDate.year', '');
@@ -217,7 +211,7 @@ export function PoemForm({ closeDialog }: PoemFormProps) {
                         type="submit"
                         className="mt-8 bg-green-500 hover:bg-green-500/90 cursor-pointer"
                     >
-                        Salvar novo poema
+                        Salvar alterações
                     </Button>
 
                 </form>

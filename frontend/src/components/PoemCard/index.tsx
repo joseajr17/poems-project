@@ -14,6 +14,9 @@ import { useState } from "react";
 import { PoemData } from "../interfaces/PoemData";
 import { api } from "@/services/api";
 
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
+import { PoemEdit } from "../PoemEdit";
+
 type PoemCardProps = {
     poem: PoemData;
     isAdmin?: boolean;
@@ -21,6 +24,7 @@ type PoemCardProps = {
 };
 
 export function PoemCard({ poem, isAdmin = false, getPoems }: PoemCardProps) {
+    const [open, setOpen] = useState(false);
     const [selectedPoemId, setSelectedPoemId] = useState<string | null>(null);
 
     async function deletePoem() {
@@ -33,9 +37,8 @@ export function PoemCard({ poem, isAdmin = false, getPoems }: PoemCardProps) {
 
     return (
         <Card
-            className={`flex flex-col transition-transform transform hover:scale-101 hover:shadow-lg border-gray-300 w-full ${
-                isAdmin ? "min-w-[350px] h-[250px]" : "min-w-full h-[500px]"
-            }`}
+            className={`flex flex-col transition-transform transform hover:scale-101 hover:shadow-lg border-gray-300 w-full ${isAdmin ? "min-w-[350px] h-[250px]" : "min-w-full h-[500px]"
+                }`}
         >
             <CardHeader className="gap-5">
                 <CardTitle>
@@ -87,7 +90,18 @@ export function PoemCard({ poem, isAdmin = false, getPoems }: PoemCardProps) {
                 {isAdmin ? (
                     <>
                         <div className="w-1/8 cursor-pointer">
-                            <FaEdit className="w-full h-full hover:text-blue-500" />
+                            <Dialog open={open} onOpenChange={setOpen}>
+                                <DialogTrigger asChild>
+                                    <a className="hover:text-sky-500 cursor-pointer flex items-center gap-1">
+                                        <FaEdit className="w-full h-full hover:text-blue-500" />
+                                    </a>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[455px]">
+                                    <DialogTitle>Editar Poemas</DialogTitle>
+                                    <PoemEdit closeDialog={() => setOpen(false)} poem={poem} getPoems={getPoems} />
+                                </DialogContent>
+                            </Dialog>
+
                         </div>
 
                         <div className="w-1/8 cursor-pointer" onClick={deletePoem}>

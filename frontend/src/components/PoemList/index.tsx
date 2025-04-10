@@ -1,36 +1,17 @@
-import { useState } from "react";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "../ui/card";
-
-import { PoemModal } from "../PoemModal/index.tsx";
 import { PoemData } from "../interfaces/PoemData.ts";
-
-import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import { api } from "@/services/api.ts";
 import { PoemCard } from "../PoemCard/index.tsx";
 
 type PoemListProps = {
     poems: PoemData[];
     isAdmin?: boolean;
     getPoems: () => Promise<void>;
+    loading?: boolean;
+    errorLoading?: string | null;
 };
 
-export function PoemList({ poems, isAdmin = false, getPoems }: PoemListProps) {
-
-    const [selectedPoemId, setSelectedPoemId] = useState<string | null>(null);
-
-    async function deleteTask(id: string) {
-        await api.delete(`/api/poem${id}`);
-        getPoems();
-    }
-
+export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoading }: PoemListProps) {
+    if (loading) return <p>Carregando poemas...</p>;
+    if (errorLoading) return <p>{errorLoading}</p>;
     return (
         <section className="flex flex-col border m-2 p-2 h-full gap-4 w-full" id="poemList">
 
@@ -48,7 +29,6 @@ export function PoemList({ poems, isAdmin = false, getPoems }: PoemListProps) {
                         getPoems={getPoems}
                     />
                 ))}
-
             </div>
         </section>
     );

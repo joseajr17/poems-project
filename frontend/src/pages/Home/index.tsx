@@ -5,18 +5,13 @@ import { Header } from "@/components/Header/index.tsx";
 import { usePoems } from "@/hooks/usePoems";
 
 export function Home() {
-    const { poems, loading, error } = usePoems();
-
-    if (loading) return <p>Carregando poemas...</p>;
-    if (error) return <p>{error}</p>;
-
+    const { poems, loading, error, getPoems } = usePoems();
     return (
         <>
-            <Header />
+            <Header getPoems={ getPoems } />
             <div className=" flex items-center justify-center flex-col gap-5 mt-10 ">
                 <About />
-                {/* <PoemForm getPoems={getPoems} /> */}
-                <PoemList poems={poems} />
+                <PoemList poems={poems} getPoems={getPoems } loading={loading} errorLoading ={error} />
             </div>
         </>
     )

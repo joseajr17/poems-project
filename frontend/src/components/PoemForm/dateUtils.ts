@@ -1,4 +1,4 @@
-export const generateDays = () => Array.from({ length: 31 }, (_, i) => (i + 1).toString());
+export const generateDays = () => Array.from({ length: 31 }, (_, i) => (i + 1).toString().padStart(2, '0'));
 
 export const generateMonths = () => [
     { name: "Janeiro", value: "01" },
