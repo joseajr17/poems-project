@@ -15,6 +15,7 @@ type PoemListProps = {
 
 export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoading }: PoemListProps) {
     const [ordemCrescente, setOrdemCrescente] = useState(true);
+    const [sortByDate, setSortByDate] = useState(true);
     if (loading) return <p>Carregando poemas...</p>;
     if (errorLoading) return <p>{errorLoading}</p>;
     return (
@@ -24,7 +25,7 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
                 <h1 className="absolute left-1/2 transform -translate-x-1/2 text-xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100">
                     {isAdmin ? "Gerenciador de Poemas" : "Galeria de Poemas"}
                 </h1>
-                <div className="ml-auto flex justify-between items-center gap-3 mr-10 mt-2">
+                <div className="ml-auto flex justify-between items-center gap-3 mt-2">
                     <div className="flex items-center gap-2">
                         <input
                             type="checkbox"
@@ -35,7 +36,7 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
                         />
                         <label
                             htmlFor="a-z"
-                            className={`cursor-pointer px-4 py-2 rounded-md border transition ${ordemCrescente
+                            className={`cursor-pointer px-4 py-2 rounded-md transition ${ordemCrescente
                                 ? 'bg-blue-500 text-white'
                                 : 'bg-white text-gray-700 border-gray-300'
                                 }`}
@@ -55,7 +56,7 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
                         />
                         <label
                             htmlFor="a-z"
-                            className={`cursor-pointer px-4 py-2 rounded-md border transition ${!ordemCrescente
+                            className={`cursor-pointer px-4 py-2 rounded-md transition ${!ordemCrescente
                                 ? 'bg-blue-500 text-white'
                                 : 'bg-white text-gray-700 border-gray-300'
                                 }`}
@@ -64,14 +65,37 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
                             {!ordemCrescente}
                         </label>
                     </div>
+
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            id="sortByDate"
+                            checked={sortByDate}
+                            onChange={(e) => setSortByDate(e.target.checked)}
+                            className="hidden peer"
+                        />
+                        <label
+                            htmlFor="sortByDate"
+                            className={`cursor-pointer px-4 py-2 rounded-md transition ${sortByDate
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-white text-gray-700 border-gray-300'
+                                }`}
+                        >
+                            Mais recentes
+                            {sortByDate}
+                        </label>
+                    </div>
                 </div>
+
+
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center items-start">
 
-                {ordemCrescente ?
+                {ordemCrescente && sortByDate ?
                     poems
                         .sort((a, b) => a.title.localeCompare(b.title))
+                        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                         .map(poem => (
                             <PoemCard
                                 key={poem.id}
@@ -81,6 +105,7 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
                             />
                         )) : poems
                             .sort((a, b) => b.title.localeCompare(a.title))
+                            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
                             .map(poem => (
                                 <PoemCard
                                     key={poem.id}
