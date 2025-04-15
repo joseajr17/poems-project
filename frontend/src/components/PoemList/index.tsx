@@ -4,6 +4,12 @@ import { PoemCard } from "../PoemCard/index.tsx";
 import { FaArrowDownAZ } from "react-icons/fa6";
 import { FaArrowUpAZ } from "react-icons/fa6";
 import { useState } from "react";
+import { Button } from "../ui/button.tsx";
+import { CgOptions } from "react-icons/cg";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
+import { FilterMenu } from "../FilterMenu/index.tsx";
+import { DialogDescription } from "@radix-ui/react-dialog";
+import { usePoems } from "@/hooks/usePoems.ts";
 
 type PoemListProps = {
     poems: PoemData[];
@@ -16,6 +22,15 @@ type PoemListProps = {
 export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoading }: PoemListProps) {
     const [ordemCrescente, setOrdemCrescente] = useState(true);
     const [sortByDate, setSortByDate] = useState(true);
+    const [open, setOpen] = useState(false);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+
+    const { getFilteredPoems, filteredPoems } = usePoems();
+
+    const usandoFiltro = startDate && endDate;
+    const poemasParaExibir = usandoFiltro ? filteredPoems : poems;
+
     if (loading) return <p>Carregando poemas...</p>;
     if (errorLoading) return <p>{errorLoading}</p>;
     return (
@@ -85,6 +100,38 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
                             {sortByDate}
                         </label>
                     </div>
+
+                    <div className="flex items-center gap-2">
+                        <Dialog
+                            open={open}
+                            onOpenChange={(isOpen) => {
+                                if (!isOpen) {
+                                    setStartDate("");
+                                    setEndDate("");
+                                }
+                                setOpen(isOpen);
+                            }}
+                        >
+                            <DialogTrigger asChild>
+                                <Button
+                                    className="text-white hover:text-blue-500 cursor-pointer"
+                                ><CgOptions />  Filtros</Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[455px]">
+                                <DialogTitle>Filtros de Poema</DialogTitle>
+                                <DialogDescription>Use filtros para encontrar poemas.</DialogDescription>
+
+                                <FilterMenu
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    setStartDate={setStartDate}
+                                    setEndDate={setEndDate}
+                                    closeDialog={() => setOpen(false)}
+                                    onApplyFilter={(startDate, endDate) => getFilteredPoems(startDate, endDate)}
+                                />
+                            </DialogContent>
+                        </Dialog>
+                    </div>
                 </div>
 
 
@@ -93,7 +140,7 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center items-start">
 
                 {ordemCrescente && sortByDate ?
-                    poems
+                    poemasParaExibir
                         .sort((a, b) => a.title.localeCompare(b.title))
                         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                         .map(poem => (
@@ -103,7 +150,7 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
                                 isAdmin={isAdmin}
                                 getPoems={getPoems}
                             />
-                        )) : poems
+                        )) : poemasParaExibir
                             .sort((a, b) => b.title.localeCompare(a.title))
                             .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
                             .map(poem => (
