@@ -5,7 +5,7 @@ import severinoImg3 from './severinoImg3.jpg';
 export function About() {
 
     return (
-        <section id="about" className="flex flex-col gap-4 w-full border h-full p-10 ">
+        <section id="about" className="flex flex-col gap-4 w-full border h-full p-10">
             <div className="flex flex-col items-center gap-2">
                 <h1 className='text-xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100'>Conheça um pouco sobre a história do Poeta</h1>
             </div>

@@ -11,7 +11,7 @@ export function AdminArea() {
     return (
         <>
             <Header isAdmin getPoems={getPoems} />
-            <div className=" flex items-center justify-center flex-col gap-5 mt-10 ">
+            <div className="flex items-center justify-center flex-col gap-5 mt-10">
                 <PoemList poems={poems} isAdmin getPoems={getPoems} />
             </div>
         </>
