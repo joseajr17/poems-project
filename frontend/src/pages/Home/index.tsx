@@ -9,7 +9,7 @@ export function Home() {
     return (
         <>
             <Header getPoems={ getPoems } />
-            <div className=" flex items-center justify-center flex-col gap-5 mt-10 ">
+            <div className="flex items-center justify-center flex-col gap-5 mt-10">
                 <About />
                 <PoemList poems={poems} getPoems={getPoems } loading={loading} errorLoading ={error} />
             </div>

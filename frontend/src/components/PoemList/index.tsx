@@ -30,7 +30,7 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
             : b.title.localeCompare(a.title)
     );
 
-    if (loading) return <p>Carregando poemas...</p>;
+    if (loading) console.log("Carregando poemas...");
     if (errorLoading) return <p>{errorLoading}</p>;
     return (
         <section className="flex flex-col border m-2 p-2 h-full gap-4 w-full" id="poemList">
@@ -47,16 +47,21 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
                 getFilteredPoems={getFilteredPoems}
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center items-start">
-                {sortedPoems.map(poem => (
-                    <PoemCard
-                        key={poem.id}
-                        poem={poem}
-                        isAdmin={isAdmin}
-                        getPoems={getPoems}
-                    />
-                ))}
-            </div>
+            {sortedPoems.length !== 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center items-start">
+                    {sortedPoems.map(poem => (
+                        <PoemCard
+                            key={poem.id}
+                            poem={poem}
+                            isAdmin={isAdmin}
+                            getPoems={getPoems}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="flex flex-col items-center justify-center h-full gap-4">
+                    <h1 className="text-gray-500 text-xl">Nenhum poema encontrado</h1>
+                </div>)}
         </section>
     );
 }

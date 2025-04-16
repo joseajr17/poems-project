@@ -6,105 +6,107 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 import { FilterMenu } from "../FilterMenu";
 
 type PoemListHeaderProps = {
-    isAdmin: boolean;
-    ordemCrescente: boolean;
-    setOrdemCrescente: (value: boolean) => void;
-    open: boolean;
-    setOpen: (value: boolean) => void;
-    startDate: string;
-    endDate: string;
-    setStartDate: (value: string) => void;
-    setEndDate: (value: string) => void;
-    getFilteredPoems: (start: string, end: string) => void;
+  isAdmin: boolean;
+  ordemCrescente: boolean;
+  setOrdemCrescente: (value: boolean) => void;
+  open: boolean;
+  setOpen: (value: boolean) => void;
+  startDate: string;
+  endDate: string;
+  setStartDate: (value: string) => void;
+  setEndDate: (value: string) => void;
+  getFilteredPoems: (start: string, end: string) => void;
 };
 
 export function PoemListHeader({
-    isAdmin,
-    ordemCrescente,
-    setOrdemCrescente,
-    open,
-    setOpen,
-    startDate,
-    endDate,
-    setStartDate,
-    setEndDate,
-    getFilteredPoems,
+  isAdmin,
+  ordemCrescente,
+  setOrdemCrescente,
+  open,
+  setOpen,
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+  getFilteredPoems,
 }: PoemListHeaderProps) {
-    return (
-        <div className="w-full flex flex-col gap-2 mt-2">
-            <div className="flex items-center justify-between w-full">
-                <h1 className="text-xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100">
-                    {isAdmin ? "Gerenciador de Poemas" : "Galeria de Poemas"}
-                </h1>
+  return (
+    <div className="w-full flex flex-col gap-2 mt-2">
+      <div className="flex items-center justify-between w-full">
+        <h1 className="text-xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100">
+          {isAdmin ? "Gerenciador de Poemas" : "Galeria de Poemas"}
+        </h1>
 
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2">
-                        <input
-                            type="checkbox"
-                            id="az-asc"
-                            checked={ordemCrescente}
-                            onChange={(e) => setOrdemCrescente(e.target.checked)}
-                            className="hidden peer"
-                        />
-                        <label
-                            htmlFor="az-asc"
-                            className={`cursor-pointer px-4 py-2 rounded-md transition ${ordemCrescente
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-white text-gray-700 border border-gray-300"
-                                }`}
-                        >
-                            <FaArrowDownAZ />
-                        </label>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="az-asc"
+              checked={ordemCrescente}
+              onChange={(e) => setOrdemCrescente(e.target.checked)}
+              className="hidden peer"
+            />
+            <label
+              htmlFor="az-asc"
+              className={`cursor-pointer px-4 py-2 rounded-md transition ${
+                ordemCrescente
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-gray-700 border border-gray-300"
+              }`}
+            >
+              <FaArrowDownAZ />
+            </label>
 
-                        <input
-                            type="checkbox"
-                            id="az-desc"
-                            checked={!ordemCrescente}
-                            onChange={(e) => setOrdemCrescente(!e.target.checked)}
-                            className="hidden peer"
-                        />
-                        <label
-                            htmlFor="az-desc"
-                            className={`cursor-pointer px-4 py-2 rounded-md transition ${!ordemCrescente
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-white text-gray-700 border border-gray-300"
-                                }`}
-                        >
-                            <FaArrowUpAZ />
-                        </label>
-                    </div>
+            <input
+              type="checkbox"
+              id="az-desc"
+              checked={!ordemCrescente}
+              onChange={(e) => setOrdemCrescente(!e.target.checked)}
+              className="hidden peer"
+            />
+            <label
+              htmlFor="az-desc"
+              className={`cursor-pointer px-4 py-2 rounded-md transition ${
+                !ordemCrescente
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-gray-700 border border-gray-300"
+              }`}
+            >
+              <FaArrowUpAZ />
+            </label>
+          </div>
 
-                    <Dialog
-                        open={open}
-                        onOpenChange={(isOpen) => {
-                            if (!isOpen) {
-                                setStartDate("");
-                                setEndDate("");
-                            }
-                            setOpen(isOpen);
-                        }}
-                    >
-                        <DialogTrigger asChild>
-                            <Button className="text-white hover:text-blue-500 cursor-pointer">
-                                <CgOptions /> Filtros
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-[455px]">
-                            <DialogTitle>Filtros de Poema</DialogTitle>
-                            <DialogDescription>Use filtros para encontrar poemas.</DialogDescription>
+          <Dialog
+            open={open}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                setStartDate("");
+                setEndDate("");
+              }
+              setOpen(isOpen);
+            }}
+          >
+            <DialogTrigger asChild>
+              <Button className="text-white hover:text-blue-500 cursor-pointer">
+                <CgOptions /> Filtros
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[455px]">
+              <DialogTitle>Filtros de Poema</DialogTitle>
+              <DialogDescription>Use filtros para encontrar poemas.</DialogDescription>
 
-                            <FilterMenu
-                                startDate={startDate}
-                                endDate={endDate}
-                                setStartDate={setStartDate}
-                                setEndDate={setEndDate}
-                                closeDialog={() => setOpen(false)}
-                                onApplyFilter={(startDate, endDate) => getFilteredPoems(startDate, endDate)}
-                            />
-                        </DialogContent>
-                    </Dialog>
-                </div>
-            </div>
+              <FilterMenu
+                startDate={startDate}
+                endDate={endDate}
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+                closeDialog={() => setOpen(false)}
+                onApplyFilter={(startDate, endDate) => getFilteredPoems(startDate, endDate)}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
-    );
+      </div>
+    </div>
+  );
 }

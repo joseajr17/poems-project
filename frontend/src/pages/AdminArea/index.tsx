@@ -5,7 +5,7 @@ import { usePoems } from "@/hooks/usePoems";
 export function AdminArea() {
     const { poems, loading, error, getPoems } = usePoems();
 
-    if (loading) return <p>Carregando poemas...</p>;
+    if (loading) console.log("Carregando poemas...");
     if (error) return <p>{error}</p>;
 
     return (
