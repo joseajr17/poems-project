@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 export function PhotosSection() {
-    
 
     const [selected, setSelected] = useState<string | null>(null);
     const [photoTitle, setPhotoTitle] = useState<string | null>(null);
