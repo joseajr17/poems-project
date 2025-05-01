@@ -2,8 +2,14 @@ import { photosMock } from "./mock"
 import { useState } from "react";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { PhotoData } from "../interfaces/PhotoData";
 
-export function PhotosSection() {
+type PhotosSectionProps = {
+    photos: PhotoData[];
+    getPhotos: () => Promise<void>;
+};
+
+export function PhotosSection({ photos, getPhotos }: PhotosSectionProps) {
 
     const [selected, setSelected] = useState<string | null>(null);
     const [photoTitle, setPhotoTitle] = useState<string | null>(null);
@@ -17,7 +23,7 @@ export function PhotosSection() {
             </div>
 
             <div className="columns-2 sm:columns-3 md:columns-4 gap-4 w-full max-w-7xl">
-                {photosMock.map((photo, index) => (
+                {photos.map((photo, index) => (
                     <img
                         key={index}
                         src={photo.url}
