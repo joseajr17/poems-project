@@ -3,6 +3,7 @@ import { PoemList } from "../../components/PoemList";
 import { About } from "../../components/About";
 import { Header } from "@/components/Header/index.tsx";
 import { usePoems } from "@/hooks/usePoems";
+import { PhotosSection } from "@/components/PhotosSection";
 
 export function Home() {
     const { poems, loading, error, getPoems } = usePoems();
@@ -11,6 +12,7 @@ export function Home() {
             <Header getPoems={ getPoems } />
             <div className="flex items-center justify-center flex-col gap-5 mt-10">
                 <About />
+                <PhotosSection />
                 <PoemList poems={poems} getPoems={getPoems } loading={loading} errorLoading ={error} />
             </div>
         </>
