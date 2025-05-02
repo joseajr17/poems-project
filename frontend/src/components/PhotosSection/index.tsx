@@ -16,14 +16,14 @@ export function PhotosSection({ photos, getPhotos }: PhotosSectionProps) {
     return (
         <section
             id="photos"
-            className="flex flex-col justify-start items-center gap-4 w-full border h-screen p-10 overflow-y-auto"
+            className="flex flex-col justify-start items-center gap-4 w-full border min-h-screen p-4 sm:p-6 md:p-10 overflow-y-auto "
         >
-            <div className="flex flex-col items-center gap-2">
-                <h1 className='text-xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100'>Galeria de Fotos</h1>
+            <div className="flex flex-col items-center gap-2 text-center">
+                <h1 className='text-xl sm:text-2xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100'>Galeria de Fotos</h1>
             </div>
 
-            <div className="columns-2 sm:columns-3 md:columns-4 gap-4 w-full max-w-7xl">
-                {photos.map((photo, index) => (
+            <div className="columns-2 md:columns-3 lg:columns-4 gap-4 w-full max-w-7xl">
+                {photosMock.map((photo, index) => (
                     <img
                         key={index}
                         src={photo.url}

@@ -33,7 +33,9 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
     if (loading) console.log("Carregando poemas...");
     if (errorLoading) return <p>{errorLoading}</p>;
     return (
-        <section className="flex flex-col border m-2 p-2 h-full gap-4 w-full" id="poemList">
+        <section
+            className="flex flex-col border m-2 p-2 h-full gap-4 w-full "
+            id="poemList">
 
             <PoemListHeader isAdmin={isAdmin}
                 ordemCrescente={ordemCrescente}
@@ -48,7 +50,10 @@ export function PoemList({ poems, isAdmin = false, getPoems, loading, errorLoadi
             />
 
             {sortedPoems.length !== 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center items-start">
+                <div className={`grid grid-cols-1 sm:grid-cols-2  
+                    ${isAdmin ? "gap-10 justify-center items-start md-grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "md:grid-cols-3 lg:grid-cols-4  gap-4"}
+                
+                `}>
                     {sortedPoems.map(poem => (
                         <PoemCard
                             key={poem.id}

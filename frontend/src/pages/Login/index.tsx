@@ -39,12 +39,20 @@ export function Login() {
     } else {
 
         return (
-            <div className="max-w-sm mx-auto my-auto p-8 w-1/2 bg-white shadow-lg rounded-xl border border-gray-400 text-black font-sans">
-                <h2 className="text-2xl font-semibold text-center mb-4">{"Login para Administrador"}</h2>
+            <div className="max-w-sm mx-auto my-auto p-8 w-1/2 sm:bg-white shadow-lg rounded-xl border border-gray-400 text-black font-sans">
 
-                <form 
-                className="space-y-4"
-                onSubmit={handleSubmit(handleSignIn)} noValidate >
+                <div className="flex items-center justify-center py-2">
+                    
+                    <h2 className="text-2xl font-semibold text-center mb-4 sm:hidden">{"Login"}</h2>
+                    <h2 className="text-2xl font-semibold text-center mb-4 hidden sm:inline">{"Login para Administrador"}</h2>
+                    
+                </div>
+
+                
+
+                <form
+                    className="space-y-4"
+                    onSubmit={handleSubmit(handleSignIn)} noValidate >
 
                     <div className="flex flex-col gap-4">
                         <div>

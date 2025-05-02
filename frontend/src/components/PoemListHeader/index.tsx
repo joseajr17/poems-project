@@ -31,10 +31,14 @@ export function PoemListHeader({
   getFilteredPoems,
 }: PoemListHeaderProps) {
   return (
-    <div className="relative flex items-center">
-      <h1 className="absolute left-1/2 transform -translate-x-1/2 text-xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative w-full ">
+      
+      {/* className="text-center sm:text-left text-xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100 w-full" */}
+      {/* className="absolute left-1/2 transform -translate-x-1/2 text-xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100" */}
+      <h1 className="text-center sm:text-left text-xl font-bold text-gray-900 opacity-50 hover:text-sky-500 hover:opacity-100 md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
         {isAdmin ? "Gerenciador de Poemas" : "Galeria de Poemas"}
       </h1>
+
       <div className="ml-auto">
         {/* Segunda DIV */}
         <div className="flex justify-end w-full ">

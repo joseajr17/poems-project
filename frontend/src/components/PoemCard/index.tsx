@@ -34,16 +34,16 @@ export function PoemCard({ poem, isAdmin = false, getPoems }: PoemCardProps) {
     }
 
     const showModal = selectedPoemId !== null;
-
     return (
         <Card
-            className={`flex flex-col transition-transform transform hover:scale-101 hover:shadow-lg border-gray-300 w-full ${isAdmin ? "min-w-[350px] h-[250px]" : "min-w-full h-[500px]"
+            className={`flex flex-col transition-transform transform 
+                hover:scale-101 hover:shadow-lg border-gray-300 ${isAdmin ? "min-w-full md:min-w-[350px] h-[250px]" : "w-full h-[500px]"
                 }`}
         >
-            <CardHeader className="gap-5">
+            <CardHeader className="gap-3">
                 <CardTitle>
                     <button
-                        className="flex self-end text-blue-500 hover:underline cursor-pointer"
+                        className="text-blue-500 hover:underline cursor-pointer break-words text-lg"
                         onClick={() => setSelectedPoemId(poem.id)}
                     >
                         {poem.title}
@@ -56,7 +56,7 @@ export function PoemCard({ poem, isAdmin = false, getPoems }: PoemCardProps) {
                 )}
             </CardHeader>
 
-            <CardContent className="flex items-center flex-col flex-grow self-start gap-2">
+            <CardContent className="flex flex-col flex-grow items-start self-start gap-2 overflow-hidden">
                 {isAdmin ? (
                     showModal && (
                         <PoemModal
@@ -67,7 +67,10 @@ export function PoemCard({ poem, isAdmin = false, getPoems }: PoemCardProps) {
                     )
                 ) : (
                     <>
-                        <pre>{poem.content.split(/\n\s*\n/)[0]}</pre>
+                    {/* text-sm overflow-hidden text-ellipsis whitespace-pre-wrap max-h-[160px] */}
+                        <pre className="text-sm">
+                            {poem.content.split(/\n\s*\n/)[0]}
+                        </pre>
                         <button
                             className="text-blue-500 hover:underline cursor-pointer"
                             onClick={() => setSelectedPoemId(poem.id)}
@@ -86,13 +89,13 @@ export function PoemCard({ poem, isAdmin = false, getPoems }: PoemCardProps) {
                 )}
             </CardContent>
 
-            <CardFooter className={`mt-auto ${isAdmin ? "justify-between" : ""}`}>
+            <CardFooter className={`mt-auto ${isAdmin ? "justify-between" : "text-sm"}`}>
                 {isAdmin ? (
                     <>
                         <div className="w-1/8 cursor-pointer">
                             <Dialog open={open} onOpenChange={setOpen}>
                                 <DialogTrigger asChild>
-                                    <a className="hover:text-sky-500 cursor-pointer flex items-center gap-1">
+                                    <a className="flex items-center gap-1 cursor-pointer hover:text-sky-500">
                                         <FaEdit className="w-full h-full hover:text-blue-500" />
                                     </a>
                                 </DialogTrigger>
