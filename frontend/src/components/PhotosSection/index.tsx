@@ -39,20 +39,22 @@ export function PhotosSection({ photos, getPhotos }: PhotosSectionProps) {
             </div>
 
             <Dialog open={!!selected} onOpenChange={() => setSelected(null)}>
-                <DialogContent className="max-w-3xl p-0">
+                <DialogContent className="max-w-3xl max-h-screen overflow-auto">
                     {selected && (
-                        <div>
+                        <div className="flex flex-col items-center">
                             <img
                                 src={selected}
                                 alt="Zoom"
-                                className="w-full h-auto rounded-xl"
+                                className="max-w-full max-h-[80vh] object-contain rounded-xl"
                             />
-                            <div className="flex justify-center items-center my-2 text-md text-bold text-gray-900">
+                            <div className="flex justify-center items-center my-2 text-md font-bold text-gray-900">
                                 <h1>{photoTitle}</h1>
                             </div>
                         </div>
                     )}
                 </DialogContent>
+
+
             </Dialog>
         </section>
     );
